@@ -1,0 +1,50 @@
+﻿@using VCS.Models.ViewModels;
+@model IssueMasterModel
+
+<link href="~/css/issues.css" rel="stylesheet" />
+
+<!-- Main Body -->
+<section>
+    <div class="container col-12">
+        <div class="row">
+            <div class="col-5">
+                <h2>Issue</h2>
+                <div class="darker mt-4 float-right">
+                    <h4>@Model.ViewModel.Title</h4> <br /> <span>- @Model.ViewModel.CreatedOn / @Model.ViewModel.User</span> <br>
+                    <p style="color:black">@Model.ViewModel.Description</p>
+                </div>
+            </div>
+
+            <div class="col-4 pb-4">
+                <h2>Comments</h2>
+
+                @foreach (var comment in Model.ViewModel.Comments)
+                {
+                    <div id="comment-section" class="text-justify darker mt-4 float-right">
+                        <h4>@comment.User</h4> <br /> <span>- @comment.CreatedOn</span> <br>
+                        <p>@comment.Text</p>
+                    </div>
+                }
+            </div>
+
+            <div class="col-3   ">
+                <h2>Add Comment</h2>
+
+                <form asp-controller="Issues" asp-action="PostComment" style="margin-top:2em" class="form-comment" id="algin-form">
+                    <div class="form-group">
+                        <label asp-for="@Model.InputModel.Text" class="control-label"></label>
+                        <textarea asp-for="@Model.InputModel.Text" class="form-control"> </textarea>
+                        <input hidden asp-for="@Model.InputModel.IssueId" value="@Model.ViewModel.Id"/>
+                    </div>
+                    <div class="form-group">
+                        <button onclick="fetchComment()" type="submit" id="post" class="btn">Post Comment</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+

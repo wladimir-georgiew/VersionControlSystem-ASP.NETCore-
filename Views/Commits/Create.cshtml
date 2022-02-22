@@ -1,0 +1,45 @@
+﻿@model VCS.Models.InputModels.CommitInputModel
+
+@{
+    ViewData["Title"] = "Create";
+    var pullRequestId = this.Context.Request.Query["PullId"];
+
+}
+
+<div class="col-md-10 mx-auto py-4">
+    <div class="card">
+        <div class="card-header bg-primary text-uppercase text-white">
+            <h4>Create Commit</h4>
+        </div>
+        <div class="card-body">
+            <form asp-controller="Commits" asp-action="Create" method="post">
+                <div style="text-align:left;" asp-validation-summary="All" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.Title" class="control-label"></label>
+                            <input asp-for="@Model.Title" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.Description" class="control-label"></label>
+                            <textarea asp-for="@Model.Description" class="form-control"> </textarea>
+                        </div>
+                    </div>
+                </div>
+
+                @*If someone else than the owner of the repository is trying to commit, the value will be the pull request id. If the owner 
+                    is commiting to his own repository, the value will be empty, because it's not needed*@
+                <input hidden asp-for="@Model.PullRequestId" value="@(string.IsNullOrEmpty(pullRequestId) ? 0 : pullRequestId)" />
+
+                <div class="form-group">
+                    <a style="color: white" type="button" href='javascript:history.go(-1)' class="btn btn-lg btn-danger rounded-0 text-uppercase">cancel</a>
+                    <input type="submit" value="submit" class="btn btn-lg btn-primary rounded-0 text-uppercase" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

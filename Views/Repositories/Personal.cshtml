@@ -1,0 +1,10 @@
+﻿@using VCS.Models.ViewModels
+@model List<AllRepositoriesViewModel>
+
+<div class="container">
+    <main role="main" class="pb-3">
+        <a style="margin-bottom:1em" class="btn btn-info" asp-controller="Repositories" asp-action="Create">New Repository</a>
+    </main>
+</div>
+
+<partial model="Model" name="~/Views/Repositories/All.cshtml" />

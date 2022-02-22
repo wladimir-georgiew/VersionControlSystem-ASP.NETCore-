@@ -1,0 +1,28 @@
+﻿@using VCS.Models.ViewModels
+@using System.Security.Claims;
+@using VCS.Data.Models;
+
+@model List<CommitsViewModel>
+
+@{
+    Repository repository = (Repository)this.ViewData["Repository"];
+
+    var RepoOwnerId = this.ViewData["RepositoryOwnerId"];
+    PullRequest PullRequest = (PullRequest)this.ViewData["PullRequest"];
+
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+
+<h3 class="pt-3 pb-3 Title"> <a asp-controller="Repositories" asp-action="Repository" asp-route-id="@repository.Id">@repository.Title</a> / @PullRequest.Title</h3>
+
+<div class="col-md-12">
+    <h4>Commits</h4>
+
+    @*If the current user does not own the repo, he can add pull requests*@
+    @if (userId != RepoOwnerId.ToString())
+    {
+        <a asp-controller="Commits" asp-action="Create" asp-route-Id="@repository.Id" asp-route-PullId="@PullRequest.Id" class="btn btn-info">New Commit</a>
+    }
+
+    <partial name="~/Views/Commits/_Commits.cshtml" model="@Model" />
+</div>

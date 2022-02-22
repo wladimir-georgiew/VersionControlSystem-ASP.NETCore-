@@ -1,0 +1,35 @@
+﻿@using VCS.Models.ViewModels
+@model List<AllRepositoriesViewModel>
+
+
+<div class="container">
+    <main role="main" class="pb-3">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Commits</th>
+                    <th scope="col">Pull Requests</th>
+                    <th scope="col">Issues</th>
+                    <th scope="col">User</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var repo in Model)
+                {
+                    <tr>
+                        <th scope="row">@repo.Id</th>
+                        <td>
+                            <a asp-controller="Repositories" asp-action="Repository" asp-route-id="@repo.Id">@repo.Title</a>
+                        </td>
+                        <td>@repo.Commits</td>
+                        <td>@repo.PullRequests</td>
+                        <td>@repo.Issues</td>
+                        <td>@repo.User</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </main>
+</div>

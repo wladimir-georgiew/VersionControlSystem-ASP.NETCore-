@@ -1,0 +1,55 @@
+﻿@using VCS.Models.ViewModels
+
+@model List<CommitsViewModel>
+
+<style>
+    .word-wrap{
+        word-break: break-all;
+    }
+    ul.timeline {
+        list-style-type: none;
+        position: relative;
+    }
+
+        ul.timeline:before {
+            content: ' ';
+            background: #d4d9df;
+            display: inline-block;
+            position: absolute;
+            left: 29px;
+            width: 2px;
+            height: 100%;
+            z-index: 400;
+        }
+
+        ul.timeline > li {
+            margin: 20px 0;
+            padding-left: 20px;
+        }
+
+            ul.timeline > li:before {
+                content: ' ';
+                background: white;
+                display: inline-block;
+                position: absolute;
+                border-radius: 50%;
+                border: 3px solid #22c0e8;
+                left: 20px;
+                width: 20px;
+                height: 20px;
+                z-index: 400;
+            }
+</style>
+
+
+<ul class="timeline">
+    @foreach (var commit in Model)
+    {
+    <li>
+        <h5>@commit.Title</h5>
+        <p class="word-wrap">@commit.Description</p>
+        <p href="#" class="float-right">@commit.CreatedOn</p>
+        <p class="float-none; text-muted">Commited by: @commit.User</p>
+    </li>
+    }
+</ul>

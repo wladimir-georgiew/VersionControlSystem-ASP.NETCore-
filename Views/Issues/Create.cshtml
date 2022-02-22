@@ -1,0 +1,40 @@
+﻿@model VCS.Models.InputModels.IssueInputModel
+
+@{
+    ViewData["Title"] = "Create";
+
+}
+
+<div class="col-md-10 mx-auto py-4">
+    <div class="card">
+        <div class="card-header bg-primary text-uppercase text-white">
+            <h4>Create Issue</h4>
+        </div>
+        <div class="card-body">
+            <form asp-controller="Issues" asp-action="Create" method="post">
+                <div style="text-align:left;" asp-validation-summary="All" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.Title" class="control-label"></label>
+                            <input asp-for="@Model.Title" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.Description" class="control-label"></label>
+                            <textarea asp-for="@Model.Description" class="form-control"> </textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <a style="color: white" type="button" href='javascript:history.go(-1)' class="btn btn-lg btn-danger rounded-0 text-uppercase">cancel</a>
+                    <input type="submit" value="submit" class="btn btn-lg btn-primary rounded-0 text-uppercase" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,99 @@
+﻿@using VCS.Models.ViewModels
+@using VCS.Data.Models
+@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@model RepositoryViewModel
+
+@{
+    var user = await this.UserManager.GetUserAsync(this.User);
+    var userId = user?.Id;
+}
+
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<h2 class="pt-3 pb-3 Title">@Model.Title</h2>
+
+<div class="container col-10 mt-4 mb-5">
+    <div class="row">
+        <div class="col-md-4">
+            @*Pull Requests*@
+
+            <h4>Pull Requests</h4>
+            @if (this.SignInManager.IsSignedIn(this.User))
+            {
+                @if (userId != Model.OwnerId)
+                {
+                    <a asp-controller="PullRequests" asp-action="Create" asp-route-Id="@Model.Id" class="btn btn-info">New Pull Request</a>
+                }
+                else
+                {
+                    <h6 style="color:red">You can't do pull requests to your own repository.</h6>
+                }
+            }
+            <ul class="timeline mt-auto">
+                @foreach (var pullReq in Model.PullRequests)
+                {
+                    <li>
+                        <h5>
+                            <a asp-controller="PullRequests" asp-action="PullRequest" asp-route-id="@pullReq.Id">@pullReq.Title</a>
+                        </h5>
+
+                        @*Only the owner of the repository can approve/merge pull requests*@
+                        @if (Model.OwnerId == userId && !pullReq.IsApproved)
+                        {
+                            <form asp-controller="PullRequests" asp-action="Merge" asp-route-id="@pullReq.Id">
+                                <button type="submit" class="btn btn-outline-success"> Approve</button>
+                            </form>
+                        }
+
+                        <p>Merged: @(pullReq.IsApproved == true ? "Yes" : "No")</p>
+                        <p>Commits: @pullReq.Commits</p>
+                        <p href="#" class="float-right">@pullReq.CreatedOn</p>
+                        <p class="float-none; text-muted">Requested by: @pullReq.User</p>
+
+
+                    </li>
+                }
+            </ul>
+        </div>
+
+        @*Commits*@
+        <div class="col-md-4">
+            <h4>Merged Commits</h4>
+            @if (userId == Model.OwnerId)
+            {
+                <a asp-controller="Commits" asp-action="Create" asp-route-Id="@Model.Id" class="btn btn-info">New Commit</a>
+            }
+
+            <partial name="~/Views/Commits/_Commits.cshtml" model="@Model.Commits" />
+        </div>
+
+        @*Issues*@
+        <div class="col-md-4">
+            <h4>Issues</h4>
+
+            <a asp-controller="Issues" asp-action="Create" asp-route-Id="@Model.Id" class="btn btn-info">New Issue</a>
+
+
+
+            <ul class="timeline">
+                @foreach (var issue in Model.Issues)
+                {
+                    <li>
+                        <h5>
+                            <a asp-controller="Issues" asp-action="Issue" asp-route-id="@issue.Id">@issue.Title</a>
+                        </h5>
+
+                        <p href="#" class="float-right">@issue.CreatedOn</p>
+                        <p class="float-none; text-muted">Commited by: @issue.User</p>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
